@@ -19,7 +19,6 @@
 @media (max-width: 768px) {
   .ads-tools-grid {
     grid-template-columns: 1fr;
-    max-width: 345px;
   }
 
 .ads-tool-card h3 {
@@ -32,7 +31,7 @@
   flex-direction: column;
   justify-content: space-between;
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 1.6rem;
   border: 1px solid #e6e6e6;
   color: inherit;
