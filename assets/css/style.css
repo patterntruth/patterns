@@ -377,6 +377,7 @@ nav a:hover {
 
   .mobile-ad-bar {
     display: block;
+    align-self: center;
     z-index: 999;
     background: #f1f5f9;
     transform: translateY(-100%); /* hidden by default */
