@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <title>The Attention Ownership Pattern</title>
+
+  <meta property="og:title" content="Who Actually Controls Your Attention?" />
+  <meta property="og:description" content="This didn’t talk about focus. It showed who decides what I notice." />
+  <meta property="og:type" content="website" />
+  
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<link rel="icon" href="/patterntruth/favicon.png" type="image/png">
+  <style>
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f0f0f;
+      color: #eaeaea;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .progress {
+      height: 3px;
+      background: #222;
+      margin-bottom: 32px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #6a6a6a;
+      transition: width 0.3s ease;
+    }
+
+    .question {
+      margin-bottom: 32px;
+    }
+
+    .question p {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .option {
+      display: block;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: #222;
+    }
+
+    .result {
+      display: none;
+      margin-top: 40px;
+    }
+
+    .result h2 {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .result p {
+      line-height: 1.6;
+      margin-bottom: 14px;
+      color: #d0d0d0;
+    }
+
+    .meta-line {
+      font-size: 14px;
+      color: #888;
+      margin-top: 24px;
+    }
+
+    .share {
+      margin-top: 30px;
+      padding: 14px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .share:hover {
+      background: #222;
+    }
+
+    .share.secondary {
+      opacity: 0.7;
+    }
+
+    .share.secondary:hover {
+      opacity: 0.9;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Who Actually Controls Your Attention?</h1>
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div id="quiz">
+
+    <div class="question" data-score-map="0,1,2">
+      <p>When you open your phone without a specific purpose, you usually:</p>
+      <div class="option">Notice quickly and stop</div>
+      <div class="option">Drift for a few minutes</div>
+      <div class="option">Lose more time than intended</div>
+    </div>
+
+    <div class="question" data-score-map="0,2,1">
+      <p>Most of what captures your attention daily is:</p>
+      <div class="option">Chosen intentionally</div>
+      <div class="option">Suggested by feeds, alerts, or algorithms</div>
+      <div class="option">A mix of both</div>
+    </div>
+
+    <div class="question" data-score-map="0,1,2">
+      <p>At the end of the day, your mental focus feels:</p>
+      <div class="option">Directed by me</div>
+      <div class="option">Partially fragmented</div>
+      <div class="option">Pulled in many directions</div>
+    </div>
+
+  </div>
+
+  <div class="result" id="result"></div>
+
+</div>
+
+<script>
+
+  const questions = document.querySelectorAll('.question');
+  const progressBar = document.getElementById('progressBar');
+  const resultEl = document.getElementById('result');
+
+  let current = 0;
+  let score = 0;
+
+  questions.forEach((q, qi) => {
+    const scores = q.dataset.scoreMap.split(',').map(Number);
+    const options = q.querySelectorAll('.option');
+
+    options.forEach((opt, oi) => {
+      opt.addEventListener('click', () => {
+        score += scores[oi];
+        q.style.display = 'none';
+        current++;
+
+        progressBar.style.width = (current / questions.length * 100) + '%';
+
+        if (current < questions.length) {
+          questions[current].style.display = 'block';
+        } else {
+          showResult(score);
+        }
+      });
+    });
+
+    if (qi !== 0) q.style.display = 'none';
+  });
+
+  function showResult(score) {
+
+    let html = '';
+
+    if (score <= 2) {
+
+      html = `
+        <h2>You are in the Self-Directed Attention State.</h2>
+        <p>Your attention is mostly governed by intention rather than intrusion.</p>
+        <p>You notice when something is pulling at your focus — and you intervene early.</p>
+        <p>This doesn’t mean distraction never appears. It means it rarely decides for you.</p>
+        <p><strong>Few people maintain this state consistently.</strong></p>
+      `;
+
+    } else if (score <= 4) {
+
+      html = `
+        <h2>You are in the Contested Attention State.</h2>
+        <p>Your attention is partially yours — and partially negotiated.</p>
+        <p>External signals influence what you notice more than you intend.</p>
+        <p>This state feels normal, which is why it often goes unchallenged.</p>
+        <p><strong>Most people remain here without realizing control is slipping.</strong></p>
+      `;
+
+    } else {
+
+      html = `
+        <h2>You are in the Externally Owned Attention State.</h2>
+        <p>Your attention is being directed more than it is being chosen.</p>
+        <p>Focus is repeatedly redirected before intention has time to form.</p>
+        <p>This isn’t a discipline problem — it’s a control problem.</p>
+        <p><strong>Identity, priorities, and decisions quietly follow whatever holds attention.</strong></p>
+      `;
+
+    }
+
+    html += `
+      <p class="meta-line">People who see this result often underestimate how deeply attention shapes identity.</p>
+      <div class="share" onclick="share()">Share this pattern</div>
+      <div class="share secondary" onclick="goHome()">See other patterns</div>
+    `;
+
+    resultEl.innerHTML = html;
+    resultEl.style.display = 'block';
+  }
+
+  function share() {
+
+    const text = `This didn’t talk about focus.
+It showed who decides what I notice.
+
+Check the pattern here:
+${location.href}`;
+
+    navigator.clipboard.writeText(text);
+    alert('Share text copied.');
+  }
+
+  function goHome() {
+    window.location.href = '/patterntruth/';
+  }
+
+</script>
+
+</body>
+
+</html>

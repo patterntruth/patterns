@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Illusion of Understanding Pattern</title>
+
+  <!-- Social preview -->
+  <meta property="og:title" content="Do You Understand — Or Just Recognize?" />
+  <meta property="og:description" content="This showed how easily familiarity pretends to be understanding." />
+  <meta property="og:type" content="website" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" href="/patterntruth/favicon.png" type="image/png">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f0f0f;
+      color: #eaeaea;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .progress {
+      height: 3px;
+      background: #222;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #6a6a6a;
+      transition: width 0.3s ease;
+    }
+    .question {
+      margin-bottom: 32px;
+    }
+    .question p {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .option {
+      display: block;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      cursor: pointer;
+    }
+    .option span {
+      display: block;
+      font-size: 14px;
+      color: #9a9a9a;
+      margin-top: 4px;
+    }
+    .option:hover {
+      background: #222;
+    }
+    .result {
+      display: none;
+      margin-top: 40px;
+    }
+    .result h2 {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .result p {
+      line-height: 1.6;
+      margin-bottom: 14px;
+      color: #d0d0d0;
+    }
+    .meta-line {
+      font-size: 14px;
+      color: #888;
+      margin-top: 24px;
+    }
+    .share {
+      margin-top: 30px;
+      padding: 14px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .share:hover {
+      background: #222;
+    }
+    .share.secondary {
+  opacity: 0.7;
+}
+
+.share.secondary:hover {
+  opacity: 0.9;
+}
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Do You Understand — Or Just Recognize?</h1>
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div id="quiz">
+
+    <div class="question" data-score-map="0,1,2">
+      <p>When asked to explain something you “know,” you usually:</p>
+      <div class="option">Struggle without notes <span>I know it, but can’t reconstruct it</span></div>
+      <div class="option">Explain the surface <span>The logic fades when pressed</span></div>
+      <div class="option">Rebuild it clearly <span>I can explain it from first principles</span></div>
+    </div>
+
+    <div class="question" data-score-map="0,2,1">
+      <p>If someone keeps asking “why?”, you feel:</p>
+      <div class="option">Exposed <span>I hit a wall quickly</span></div>
+      <div class="option">Comfortable <span>I can trace the logic deeper</span></div>
+      <div class="option">Slightly unsure <span>I can go some distance, then stall</span></div>
+    </div>
+
+    <div class="question" data-score-map="1,2,0">
+      <p>After learning something new, you can usually:</p>
+      <div class="option">Recognize it later <span>It feels familiar, not usable</span></div>
+      <div class="option">Rebuild it alone <span>No reference needed</span></div>
+      <div class="option">Recall parts <span>But not the structure</span></div>
+    </div>
+
+  </div>
+
+  <div class="result" id="result"></div>
+
+</div>
+
+<script>
+  const questions = document.querySelectorAll('.question');
+  const progressBar = document.getElementById('progressBar');
+  const resultEl = document.getElementById('result');
+
+  let current = 0;
+  let score = 0;
+
+  questions.forEach((q, qi) => {
+    const scores = q.dataset.scoreMap.split(',').map(Number);
+    const options = q.querySelectorAll('.option');
+
+    options.forEach((opt, oi) => {
+      opt.addEventListener('click', () => {
+        score += scores[oi];
+        q.style.display = 'none';
+        current++;
+        progressBar.style.width = (current / questions.length * 100) + '%';
+
+        if (current < questions.length) {
+          questions[current].style.display = 'block';
+        } else {
+          showResult(score);
+        }
+      });
+    });
+
+    if (qi !== 0) q.style.display = 'none';
+  });
+
+  function showResult(score) {
+    let html = '';
+
+    if (score <= 2) {
+      html = `
+        <h2>You are inside the Illusion of Understanding Pattern.</h2>
+        <p>You recognize ideas faster than you can reconstruct them.</p>
+        <p>Familiarity substitutes for comprehension.</p>
+        <p>This pattern feels like intelligence.</p>
+        <p><strong>It isn’t.</strong></p>
+      `;
+    } else if (score <= 4) {
+      html = `
+        <h2>You are in the Partial Clarity Pattern.</h2>
+        <p>You understand pieces, not systems.</p>
+        <p>Clarity appears close, but collapses under pressure.</p>
+        <p><strong>Most people here believe they’re almost done.</strong></p>
+      `;
+    } else {
+      html = `
+        <h2>You are in the Structural Understanding Pattern.</h2>
+        <p>You can rebuild ideas without reference.</p>
+        <p>Confusion signals missing structure — not failure.</p>
+        <p><strong>This pattern is rare.</strong></p>
+      `;
+    }
+
+    html += `
+      <p class="meta-line">People who see this result often rethink how they define “understanding.”</p>
+      <div class="share" onclick="share()">Share this pattern</div>
+      <div class="share secondary" onclick="goHome()">See other patterns</div>
+    `;
+
+    resultEl.innerHTML = html;
+    resultEl.style.display = 'block';
+  }
+
+  function share() {
+    const text = `This showed how easily familiarity pretends to be understanding.\n\nCheck which pattern you’re in:\n${location.href}`;
+    navigator.clipboard.writeText(text);
+    alert('Share text copied.');
+  }
+  function goHome() {
+  window.location.href = '/patterntruth/';
+}
+</script>
+
+</body>
+</html>

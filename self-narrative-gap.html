@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Self-Narrative Gap</title>
+
+  <meta property="og:title" content="How Accurate Is Your Self-Image?" />
+  <meta property="og:description" content="This didn’t test personality. It compared identity to behavior." />
+  <meta property="og:type" content="website" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" href="/patterntruth/favicon.png" type="image/png">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f0f0f;
+      color: #eaeaea;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .progress {
+      height: 3px;
+      background: #222;
+      margin-bottom: 32px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #6a6a6a;
+      transition: width 0.3s ease;
+    }
+
+    .question {
+      margin-bottom: 32px;
+    }
+
+    .question p {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .option {
+      display: block;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: #222;
+    }
+
+    .result {
+      display: none;
+      margin-top: 40px;
+    }
+
+    .result h2 {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .result p {
+      line-height: 1.6;
+      margin-bottom: 14px;
+      color: #d0d0d0;
+    }
+
+    .meta-line {
+      font-size: 14px;
+      color: #888;
+      margin-top: 24px;
+    }
+
+    .share {
+      margin-top: 30px;
+      padding: 14px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .share:hover {
+      background: #222;
+    }
+.share.secondary {
+  opacity: 0.7;
+}
+
+.share.secondary:hover {
+  opacity: 0.9;
+}
+    
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>How Accurate Is Your Self-Image?</h1>
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div id="quiz">
+
+    <div class="question" data-score-map="2,0,1">
+      <p>When describing yourself to others, you usually emphasize:</p>
+      <div class="option">What you consistently do</div>
+      <div class="option">What you value or believe</div>
+      <div class="option">What you’re trying to become</div>
+    </div>
+
+    <div class="question" data-score-map="1,0,2">
+      <p>If someone observed your last 30 days objectively, they would describe you as:</p>
+      <div class="option">Partially aligned</div>
+      <div class="option">Aligned with your self-image</div>
+      <div class="option">Different from how you see yourself</div>
+    </div>
+
+    <div class="question" data-score-map="1,2,0">
+      <p>When your actions contradict your self-story, you usually:</p>
+      <div class="option">Notice it briefly</div>
+      <div class="option">Update your self-image</div>
+      <div class="option">Explain the exception</div>
+    </div>
+
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  const questions = document.querySelectorAll('.question');
+  const progressBar = document.getElementById('progressBar');
+  const resultEl = document.getElementById('result');
+
+  let current = 0;
+  let score = 0;
+
+  questions.forEach((q, qi) => {
+    const scores = q.dataset.scoreMap.split(',').map(Number);
+    const options = q.querySelectorAll('.option');
+
+    options.forEach((opt, oi) => {
+      opt.addEventListener('click', () => {
+        score += scores[oi];
+        q.style.display = 'none';
+        current++;
+
+        progressBar.style.width = (current / questions.length * 100) + '%';
+
+        if (current < questions.length) {
+          questions[current].style.display = 'block';
+        } else {
+          showResult(score);
+        }
+      });
+    });
+
+    if (qi !== 0) q.style.display = 'none';
+  });
+
+  function showResult(score) {
+    let html = '';
+
+    if (score <= 2) {
+      html = `
+        <h2>You are in the Protected Narrative Pattern.</h2>
+        <p>You maintain a strong internal story about who you are.</p>
+        <p>When behavior contradicts it, explanations appear quickly.</p>
+        <p>This isn’t dishonesty — it’s psychological defense.</p>
+        <p><strong>Most people in this pattern believe alignment already exists.</strong></p>
+      `;
+    } else if (score <= 4) {
+      html = `
+        <h2>You are in the Fractured Narrative Pattern.</h2>
+        <p>You sense a gap between identity and behavior.</p>
+        <p>Awareness exists, but correction is inconsistent.</p>
+        <p><strong>Many people stay here longer than they expect.</strong></p>
+      `;
+    } else {
+      html = `
+        <h2>You are in the Evidence-Based Identity Pattern.</h2>
+        <p>Your self-image updates based on behavior.</p>
+        <p>Identity is flexible, not fragile.</p>
+        <p>This pattern is rare and stabilizing.</p>
+      `;
+    }
+
+    html += `
+      <p class="meta-line">People who see this result usually disagree with at least one part of it.</p>
+      <div class="share" onclick="share()">Share this pattern</div>
+      <div class="share secondary" onclick="goHome()">See other patterns</div>
+    `;
+
+    resultEl.innerHTML = html;
+    resultEl.style.display = 'block';
+  }
+
+  function share() {
+    const text = `This didn’t test my personality.
+It compared my self-image to my behavior.
+
+Check which pattern you’re in: ${location.href}`;
+
+    navigator.clipboard.writeText(text);
+    alert('Share text copied.');
+  }
+  function goHome() {
+  window.location.href = '/patterntruth/';
+}
+  
+</script>
+
+</body>
+</html>

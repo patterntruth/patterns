@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Priority Illusion</title>
+
+  <meta property="og:title" content="Do Your Priorities Actually Decide Anything?" />
+  <meta property="og:description" content="This didn’t ask what matters to me. It showed what actually governs my behavior." />
+  <meta property="og:type" content="website" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" href="/patterntruth/favicon.png" type="image/png">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f0f0f;
+      color: #eaeaea;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .progress {
+      height: 3px;
+      background: #222;
+      margin-bottom: 32px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #6a6a6a;
+      transition: width 0.3s ease;
+    }
+    .question {
+      margin-bottom: 32px;
+    }
+    .question p {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .option {
+      display: block;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      cursor: pointer;
+    }
+    .option:hover {
+      background: #222;
+    }
+    .result {
+      display: none;
+      margin-top: 40px;
+    }
+    .result h2 {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .result p {
+      line-height: 1.6;
+      margin-bottom: 14px;
+      color: #d0d0d0;
+    }
+    .meta-line {
+      font-size: 14px;
+      color: #888;
+      margin-top: 24px;
+    }
+    .share {
+      margin-top: 30px;
+      padding: 14px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .share:hover {
+      background: #222;
+    }
+    .share.secondary {
+      opacity: 0.7;
+    }
+    .share.secondary:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Do Your Priorities Actually Decide Anything?</h1>
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div id="quiz">
+
+    <div class="question" data-score-map="0,2,1">
+      <p>When two things you say matter conflict, what usually decides what you do?</p>
+      <div class="option">I already decided which one takes precedence</div>
+      <div class="option">Whichever feels easier or louder</div>
+      <div class="option">I decide in the moment</div>
+    </div>
+
+    <div class="question" data-score-map="0,1,2">
+      <p>When something “important” becomes uncomfortable, you usually:</p>
+      <div class="option">Continue, even if it costs comfort</div>
+      <div class="option">Delay and justify the delay</div>
+      <div class="option">Replace it with something that feels productive</div>
+    </div>
+
+    <div class="question" data-score-map="2,0,1">
+      <p>Which feels most accurate over time?</p>
+      <div class="option">Many things feel important, but few consistently happen</div>
+      <div class="option">My behavior reflects a small, clear set of priorities</div>
+      <div class="option">My priorities shift depending on context</div>
+    </div>
+
+  </div>
+
+  <div class="result" id="result"></div>
+
+</div>
+
+<script>
+  const questions = document.querySelectorAll('.question');
+  const progressBar = document.getElementById('progressBar');
+  const resultEl = document.getElementById('result');
+
+  let current = 0;
+  let score = 0;
+
+  questions.forEach((q, qi) => {
+    const scores = q.dataset.scoreMap.split(',').map(Number);
+    const options = q.querySelectorAll('.option');
+
+    options.forEach((opt, oi) => {
+      opt.addEventListener('click', () => {
+        score += scores[oi];
+        q.style.display = 'none';
+        current++;
+        progressBar.style.width = (current / questions.length * 100) + '%';
+
+        if (current < questions.length) {
+          questions[current].style.display = 'block';
+        } else {
+          showResult(score);
+        }
+      });
+    });
+
+    if (qi !== 0) q.style.display = 'none';
+  });
+
+  function showResult(score) {
+    let html = '';
+
+    if (score <= 2) {
+      html = `
+        <h2>You are in a Priority-Governed Life.</h2>
+        <p>Your priorities exist reminded or not.</p>
+        <p>When pressure appears, behavior doesn’t renegotiate what matters.</p>
+        <p>This doesn’t mean life is rigid — it means importance has authority.</p>
+        <p>Most people assume they live this way. Fewer actually do.</p>
+      `;
+    } else if (score <= 4) {
+      html = `
+        <h2>You are in a Mixed-Authority State.</h2>
+        <p>You know what matters, but it doesn’t always decide.</p>
+        <p>Context, comfort, and urgency sometimes outrank intention.</p>
+        <p>This state feels reasonable — which is why it’s easy to stay in.</p>
+        <p>Many people never notice when preference quietly replaces priority.</p>
+      `;
+    } else {
+      html = `
+        <h2>You are in a Preference-Led Life.</h2>
+        <p>Many things feel important, but few hold authority under pressure.</p>
+        <p>Behavior is guided more by ease than declared values.</p>
+        <p>This doesn’t mean nothing matters — it means importance isn’t enforced.</p>
+        <p>Most people discover this only after outcomes accumulate.</p>
+      `;
+    }
+
+    html += `
+      <p class="meta-line">People who see this result often disagree — until they review their behavior.</p>
+      <div class="share" onclick="share()">Share this pattern</div>
+      <div class="share secondary" onclick="goHome()">See other patterns</div>
+    `;
+
+    resultEl.innerHTML = html;
+    resultEl.style.display = 'block';
+  }
+
+  function share() {
+    const text = `This didn’t ask what matters to me.
+It showed what actually governs my behavior.
+
+Check the pattern:
+${location.href}`;
+    navigator.clipboard.writeText(text);
+    alert('Share text copied.');
+  }
+
+  function goHome() {
+    window.location.href = '/patterntruth/';
+  }
+</script>
+
+</body>
+</html>
