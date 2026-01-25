@@ -103,6 +103,12 @@
 .share.secondary:hover {
   opacity: 0.9;
 }
+    #native-ad-container {
+      display: none;
+      width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
   </style>
 </head>
@@ -112,7 +118,7 @@
 
   <h1>Who Is Actually Controlling Your Attention?</h1>
 
-  <div id="native-ad-container" style="display: none; width: 400px; margin-left: auto; margin-right: auto;">
+  <div id="native-ad-container">
   <!-- Adsterra Native Code goes here -->
     <script async="async" data-cfasync="false" src="https://pl28564010.effectivegatecpm.com/baefa54fe986168a11c27ebcd354d6c4/invoke.js"></script>
 <div id="container-baefa54fe986168a11c27ebcd354d6c4"></div>
@@ -216,7 +222,7 @@
 
     resultEl.innerHTML = html;
     resultEl.style.display = 'block';
-    document.getElementById("native-ad-container").style.display = "flex";
+    document.getElementById("native-ad-container").style.display = "block";
   }
 
   function share() {
