@@ -3,13 +3,14 @@
   margin: 0 auto;
   padding-bottom: 10px;
   border-bottom: 1px solid #e6e6e6;
+  opacity: .75;
 }
 
 .ads-tools-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   padding-top: 15px;
   padding-bottom: 40px;
@@ -18,8 +19,8 @@
 @media (max-width: 768px) {
   .ads-tools-grid {
     grid-template-columns: 1fr;
+    max-width: 345px;
   }
-}
 
 .ads-tool-card h3 {
   margin-bottom: 8px;
@@ -30,8 +31,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #ffffff;
-  border-radius: 16px;
+  background: #78BB7B;
+  border-radius: 10px;
   padding: 1.6rem;
   border: 1px solid #e6e6e6;
   color: inherit;
