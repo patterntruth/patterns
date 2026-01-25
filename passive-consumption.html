@@ -142,9 +142,12 @@
   </div>
 
   <div class="result" id="result"></div>
-
-  <script async="async" data-cfasync="false" src="https://pl28564010.effectivegatecpm.com/baefa54fe986168a11c27ebcd354d6c4/invoke.js"></script>
+  <div id="native-ad-container" style="display: none;">
+  <!-- Adsterra Native Code goes here -->
+    <script async="async" data-cfasync="false" src="https://pl28564010.effectivegatecpm.com/baefa54fe986168a11c27ebcd354d6c4/invoke.js"></script>
 <div id="container-baefa54fe986168a11c27ebcd354d6c4"></div>
+</div>
+
 
 </div>
 
@@ -213,6 +216,7 @@
 
     resultEl.innerHTML = html;
     resultEl.style.display = 'block';
+    document.getElementById("native-ad-container").style.display = "block";
   }
 
   function share() {
