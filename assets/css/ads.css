@@ -1,0 +1,62 @@
+/* --- External / Native Ads --- */
+
+.external-patterns {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #1f1f1f;
+}
+
+.external-label {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 14px;
+  letter-spacing: 0.02em;
+}
+
+/* Grid container */
+.native-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+/* Individual native item (Adsterra will inject inside) */
+.native-grid a,
+.native-grid div {
+  display: block;
+  padding: 14px 16px;
+  background: #141414;
+  border: 1px solid #1f1f1f;
+  color: #cfcfcf;
+  text-decoration: none;
+}
+
+/* Headline inside native ad */
+.native-grid h3,
+.native-grid .title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #e0e0e0;
+  margin-bottom: 6px;
+}
+
+/* Description text */
+.native-grid p,
+.native-grid .desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #a8a8a8;
+}
+
+/* Remove commercial hover effects */
+.native-grid a:hover {
+  background: #161616;
+  border-color: #262626;
+}
+
+/* Kill buttons / CTA visuals if present */
+.native-grid button,
+.native-grid .cta,
+.native-grid .call-to-action {
+  display: none !important;
+}
