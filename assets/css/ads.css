@@ -1,6 +1,7 @@
 /* Tool Grid – Max 2 Columns */
 .ads-groups {
   max-width: 900px;
+  align-self: center;
   margin: 0 auto;
   padding-bottom: 10px;
   border-bottom: 1px solid #e6e6e6;
