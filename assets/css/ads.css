@@ -1,62 +1,58 @@
-/* --- External / Native Ads --- */
-
-.external-patterns {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid #1f1f1f;
+.ad-container {
+  width: 100%;
+  margin: 20px 0;
+  text-align: center;
 }
 
-.external-label {
+.ad-placeholder {
+  width: 100%;
+  min-height: 90px;
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
-  color: #777;
-  margin-bottom: 14px;
-  letter-spacing: 0.02em;
+  color: #888;
 }
-
-/* Grid container */
-.native-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-/* Individual native item (Adsterra will inject inside) */
-.native-grid a,
-.native-grid div {
+.desktop-only {
   display: block;
-  padding: 14px 16px;
-  background: #141414;
-  border: 1px solid #1f1f1f;
-  color: #cfcfcf;
-  text-decoration: none;
 }
 
-/* Headline inside native ad */
-.native-grid h3,
-.native-grid .title {
-  font-size: 15px;
-  font-weight: 500;
-  color: #e0e0e0;
-  margin-bottom: 6px;
+.mobile-only {
+  display: none;
 }
 
-/* Description text */
-.native-grid p,
-.native-grid .desc {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #a8a8a8;
+.ad-grid-item {
+  grid-column: 1 / -1;
 }
 
-/* Remove commercial hover effects */
-.native-grid a:hover {
-  background: #161616;
-  border-color: #262626;
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
 }
 
-/* Kill buttons / CTA visuals if present */
-.native-grid button,
-.native-grid .cta,
-.native-grid .call-to-action {
-  display: none !important;
+/.. for tool page ad input % button and after result box../
+
+.tool-ad {
+  margin: 25px auto;
+}
+/.. for mobile sticky ad at the bottom../
+
+.mobile-sticky-ad {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  padding: 6px 0;
+  text-align: center;
+  z-index: 9999;
+  display: none;
 }
