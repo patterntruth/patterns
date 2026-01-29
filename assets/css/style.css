@@ -58,6 +58,11 @@ body {
   padding: 0 16px;
 }
 
+.container a {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* Header */
 .site-header {
   background: #ffffff;
