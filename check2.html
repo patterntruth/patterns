@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Which Pattern Controls You?</title>
+  <style>
+    body {
+      background: #0f1115;
+      color: #e6e6e6;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      color: #9aa0a6;
+      margin-bottom: 0.5rem;
+    }
+    .hint {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-bottom: 0.5rem;
+    }
+    .progress {
+      font-size: 0.85rem;
+      color: #9aa0a6;
+      margin-bottom: 2rem;
+    }
+    .q {
+      margin-bottom: 1.5rem;
+    }
+    .q p {
+      margin-bottom: 0.5rem;
+    }
+    .btns {
+      display: flex;
+      gap: 8px;
+    }
+    button {
+      background: #1f2937;
+      color: #fff;
+      border: 1px solid #2d3748;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    button:hover {
+      background: #2b3647;
+    }
+    button.selected {
+      background: #2563eb;
+      border-color: #3b82f6;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .reveal {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: #111827;
+      border: 1px solid #2d3748;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .reveal:hover {
+      background: #0b1220;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 16px;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      display: none;
+    }
+    a {
+      color: #8ab4f8;
+      text-decoration: none;
+    }
+    .small {
+      color: #9aa0a6;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .share {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 0.75rem;
+    }
+    .share a, .share button {
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #2d3748;
+      background: #0f1115;
+      color: #8ab4f8;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .share a:hover, .share button:hover {
+      border-color: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Your behavior isn’t random. It’s patterned.</h1>
+    <p class="sub">Answer 6 questions. No advice. No motivation. Just the pattern you’re running.</p>
+    <p class="hint">Takes ~20 seconds · No signup · No tracking</p>
+    <p class="progress" id="progressText">Question 0 of 6</p>
+
+    <div class="q" data-q="1">
+      <p>1) When you consume information, does it usually end with no concrete change in what you do next?</p>
+      <div class="btns">
+        <button onclick="setAnswer(1, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(1, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="q" data-q="2">
+      <p>2) Are you often busy, yet the main outcome of your life hasn’t changed in months?</p>
+      <div class="btns">
+        <button onclick="setAnswer(2, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(2, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="q" data-q="3">
+      <p>3) Do you often feel like you “get it,” but fail to apply it in real situations?</p>
+      <div class="btns">
+        <button onclick="setAnswer(3, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(3, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="q" data-q="4">
+      <p>4) Do unresolved decisions or unfinished loops quietly stay in your head for days or weeks?</p>
+      <div class="btns">
+        <button onclick="setAnswer(4, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(4, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="q" data-q="5">
+      <p>5) Do you keep multiple “priorities” that don’t actually decide what you do today?</p>
+      <div class="btns">
+        <button onclick="setAnswer(5, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(5, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="q" data-q="6">
+      <p>6) Does your attention get pulled by platforms, feeds, or notifications more than by deliberate choice?</p>
+      <div class="btns">
+        <button onclick="setAnswer(6, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(6, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="reveal" onclick="showResult()">Reveal my pattern</div>
+
+    <div class="result" id="resultBox"></div>
+  </div>
+
+  <script>
+    const answers = {};
+
+    function setAnswer(q, val, btn) {
+      answers[q] = val;
+      const parent = btn.closest(".btns");
+      parent.querySelectorAll("button").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answered = Object.keys(answers).length;
+      document.getElementById("progressText").innerText = `Question ${answered} of 6`;
+    }
+
+    function showResult() {
+      const resultBox = document.getElementById("resultBox");
+      const patterns = [
+        { name: "The Passive Consumption Pattern", link: "https://patterntruth.github.io/patterns/passive-consumption.html", desc: "Observing information feels like progress. Often it isn't.", score: answers[1] === "yes" ? 2 : 0 },
+        { name: "The Motion Trap", link: "https://patterntruth.github.io/patterns/motion-trap.html", desc: "Staying busy feels like momentum. It rarely carries forward.", score: answers[2] === "yes" ? 2 : 0 },
+        { name: "The Illusion of Understanding", link: "https://patterntruth.github.io/patterns/illusion-of-understanding.html", desc: "Knowing is not the same as understanding.", score: answers[3] === "yes" ? 2 : 0 },
+        { name: "The Mental Debt Pattern", link: "https://patterntruth.github.io/patterns/mental-debt-pattern.html", desc: "Unresolved decisions don't disappear. They accumulate quietly.", score: answers[4] === "yes" ? 2 : 0 },
+        { name: "The Priority Illusion", link: "https://patterntruth.github.io/patterns/priority-illusion.html", desc: "Most priorities don't decide anything.", score: answers[5] === "yes" ? 2 : 0 },
+        { name: "The Attention Ownership Pattern", link: "https://patterntruth.github.io/patterns/attention-ownership.html", desc: "Your attention isn't free. Someone else is billing it.", score: answers[6] === "yes" ? 2 : 0 },
+        { name: "The Self-Narrative Gap", link: "https://patterntruth.github.io/patterns/self-narrative-gap.html", desc: "Who you think you are vs. what your behavior shows.", score: (answers[2] === "yes" && answers[3] === "yes") ? 1 : 0 },
+        { name: "The Decision Drift", link: "https://patterntruth.github.io/patterns/decision-drift.html", desc: "Most life outcomes aren't chosen. They drift.", score: (answers[4] === "yes" || answers[5] === "yes") ? 1 : 0 },
+        { name: "The Autopilot Identity", link: "https://patterntruth.github.io/patterns/autopilot-identity.html", desc: "Some lives are lived. Others just repeat.", score: (answers[2] === "yes" && answers[6] === "yes") ? 1 : 0 }
+      ];
+
+      patterns.sort((a, b) => b.score - a.score);
+      const primary = patterns[0];
+      const secondary = patterns.slice(1, 3).map(p => p.name);
+
+      const shareText = encodeURIComponent("This showed me a pattern I didn’t notice about myself.\n\nCheck which pattern is controlling yours:");
+      const shareUrl = encodeURIComponent(primary.link);
+
+      resultBox.innerHTML = `
+        <strong>Your dominant pattern:</strong>
+        <h2>${primary.name}</h2>
+        <p>${primary.desc}</p>
+        <a href="${primary.link}">View the pattern →</a>
+        <div class="small">Secondary patterns detected: ${secondary.join(", ")}</div>
+        <div class="small"><a href="https://patterntruth.github.io/patterns/">View all patterns →</a></div>
+        <div class="small">This doesn’t describe your personality. It describes the structure your behavior currently follows.</div>
+        <div class="small">Share this pattern check:</div>
+        <div class="share">
+          <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}">Facebook</a>
+          <a target="_blank" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}">X</a>
+          <a target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}">LinkedIn</a>
+          <button onclick="navigator.clipboard.writeText('${primary.link}'); alert('Link copied. Paste anywhere (IG bio, DM, etc).')">Copy link</button>
+        </div>
+      `;
+
+      resultBox.style.display = "block";
+      resultBox.scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>
