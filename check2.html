@@ -224,13 +224,13 @@
         <div class="small"><a href="https://patterntruth.github.io/patterns/">View all patterns →</a></div>
         <div class="small">This doesn’t describe your personality. It describes the structure your behavior currently follows.</div>
         <div class="small">Share this pattern check:</div>
-        <div class="share">
-          <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}">Facebook</a>
-          <a target="_blank" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}">X</a>
-          <a target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}">LinkedIn</a>
-          <button onclick="navigator.clipboard.writeText('${window.location.href}'); alert('Link copied! Paste anywhere.')">Copy link</button>
-        </div>
-      `;
+  <div class="share">
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${encodedText}">Facebook</a>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text=${encodedText}&url=${shareUrl}">X</a>
+    <a target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}&title=${encodedText}">LinkedIn</a>
+    <button onclick="navigator.clipboard.writeText('${shareText} ${window.location.href}'); alert('Link copied! Paste anywhere.')">Copy link</button>
+  </div>
+`;
 
       resultBox.style.display = "block";
       resultBox.scrollIntoView({ behavior: "smooth" });
