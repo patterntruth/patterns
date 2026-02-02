@@ -212,6 +212,7 @@
       const shareText = encodeURIComponent(`This showed me a pattern I didn’t notice about myself: ${primary.name}\nCheck which pattern is controlling yours:`);
 
       // Use check page link for sharing
+      const encodedText = encodeURIComponent(shareText);
       const shareUrl = encodeURIComponent(window.location.href);
 
       resultBox.innerHTML = `
