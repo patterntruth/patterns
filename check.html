@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Which Pattern Controls You?</title>
+  <style>
+    body {
+      background: #0f1115;
+      color: #e6e6e6;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      color: #9aa0a6;
+      margin-bottom: 2rem;
+    }
+    .q {
+      margin-bottom: 1.5rem;
+    }
+    .q p {
+      margin-bottom: 0.5rem;
+    }
+    button {
+      background: #1f2937;
+      color: #fff;
+      border: 1px solid #2d3748;
+      padding: 10px 14px;
+      margin-right: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2b3647;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 16px;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      display: none;
+    }
+    a {
+      color: #8ab4f8;
+      text-decoration: none;
+    }
+    .small {
+      color: #9aa0a6;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>You’re not choosing most of your behavior.</h1>
+    <p class="sub">Answer 4 questions. No advice. No motivation. Just the pattern you’re running.</p>
+
+    <div class="q">
+      <p>1) When you consume content, do you usually leave with something concrete done?</p>
+      <button onclick="setAnswer(1, 'yes')">Yes</button>
+      <button onclick="setAnswer(1, 'no')">No</button>
+    </div>
+
+    <div class="q">
+      <p>2) Are your days busy, but the main outcome of your life hasn’t changed in months?</p>
+      <button onclick="setAnswer(2, 'yes')">Yes</button>
+      <button onclick="setAnswer(2, 'no')">No</button>
+    </div>
+
+    <div class="q">
+      <p>3) Do you often “know” what you should change but continue the same behavior anyway?</p>
+      <button onclick="setAnswer(3, 'yes')">Yes</button>
+      <button onclick="setAnswer(3, 'no')">No</button>
+    </div>
+
+    <div class="q">
+      <p>4) Do decisions in your life usually happen by default rather than by explicit choice?</p>
+      <button onclick="setAnswer(4, 'yes')">Yes</button>
+      <button onclick="setAnswer(4, 'no')">No</button>
+    </div>
+
+    <button onclick="showResult()">Reveal my pattern</button>
+
+    <div class="result" id="resultBox"></div>
+  </div>
+
+  <script>
+    const answers = {};
+
+    function setAnswer(q, val) {
+      answers[q] = val;
+    }
+
+    function showResult() {
+      const resultBox = document.getElementById("resultBox");
+
+      let primary = null;
+      let secondary = [];
+
+      if (answers[1] === "no") primary = {
+        name: "The Passive Consumption Pattern",
+        link: "https://patterntruth.github.io/patterns/passive-consumption.html",
+        desc: "Observing information feels like progress. Often it isn't."
+      };
+
+      if (!primary && answers[2] === "yes") primary = {
+        name: "The Motion Trap",
+        link: "https://patterntruth.github.io/patterns/motion-trap.html",
+        desc: "Staying busy feels like momentum. It rarely carries forward."
+      };
+
+      if (!primary && answers[3] === "yes") primary = {
+        name: "The Self-Narrative Gap",
+        link: "https://patterntruth.github.io/patterns/self-narrative-gap.html",
+        desc: "Who you think you are vs. what your behavior shows."
+      };
+
+      if (!primary && answers[4] === "yes") primary = {
+        name: "The Decision Drift",
+        link: "https://patterntruth.github.io/patterns/decision-drift.html",
+        desc: "Most life outcomes aren't chosen. They drift."
+      };
+
+      if (!primary) primary = {
+        name: "The Autopilot Identity",
+        link: "https://patterntruth.github.io/patterns/autopilot-identity.html",
+        desc: "Some lives are lived. Others just repeat."
+      };
+
+      if (answers[1] === "no") secondary.push("Passive Consumption");
+      if (answers[2] === "yes") secondary.push("Motion Trap");
+      if (answers[3] === "yes") secondary.push("Self-Narrative Gap");
+      if (answers[4] === "yes") secondary.push("Decision Drift");
+
+      resultBox.innerHTML = `
+        <strong>Your dominant pattern:</strong><br>
+        <h2>${primary.name}</h2>
+        <p>${primary.desc}</p>
+        <a href="${primary.link}">View the pattern →</a>
+        <div class="small">Secondary patterns detected: ${secondary.join(", ") || "None obvious"}</div>
+      `;
+
+      resultBox.style.display = "block";
+    }
+  </script>
+</body>
+</html>
