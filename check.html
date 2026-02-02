@@ -166,8 +166,8 @@ function showResult() {
       <p>Your answers don’t strongly map to a specific behavior structure.</p>
     `;
     resultBox.style.display = "block";
-    return;
     document.getElementById("native-ad-container").style.display = "grid";
+    return;
   }
 
   active.sort((a,b)=>b.score-a.score);
