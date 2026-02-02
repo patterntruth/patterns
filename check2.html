@@ -127,14 +127,17 @@ function showResult() {
   }
 
   const patterns = [
-    { name: "The Passive Consumption Pattern", link: "https://patterntruth.github.io/patterns/passive-consumption.html", desc: "Observing information feels like progress. Often it isn't.", score: (answers[1]==="yes" && answers[3]==="yes") ? 2 : 0 },
-    { name: "The Motion Trap", link: "https://patterntruth.github.io/patterns/motion-trap.html", desc: "Staying busy feels like momentum. It rarely carries forward.", score: (answers[2]==="yes" && answers[5]==="no") ? 2 : 0 },
-    { name: "The Illusion of Understanding", link: "https://patterntruth.github.io/patterns/illusion-of-understanding.html", desc: "Knowing is not the same as understanding.", score: answers[3]==="yes" ? 2 : 0 },
-    { name: "The Mental Debt Pattern", link: "https://patterntruth.github.io/patterns/mental-debt-pattern.html", desc: "Unresolved decisions don't disappear. They accumulate quietly.", score: answers[4]==="yes" ? 2 : 0 },
-    { name: "The Priority Illusion", link: "https://patterntruth.github.io/patterns/priority-illusion.html", desc: "Most priorities don't decide anything.", score: answers[5]==="yes" ? 2 : 0 },
-    { name: "The Attention Ownership Pattern", link: "https://patterntruth.github.io/patterns/attention-ownership.html", desc: "Your attention isn't free. Someone else is billing it.", score: answers[6]==="yes" ? 2 : 0 },
-    { name: "The Autopilot Identity", link: "https://patterntruth.github.io/patterns/autopilot-identity.html", desc: "Some lives are lived. Others just repeat.", score: (answers[2]==="yes" && answers[6]==="yes") ? 2 : 0 },
-    { name: "The Decision Drift", link: "https://patterntruth.github.io/patterns/decision-drift.html", desc: "Most life outcomes aren't chosen. They drift.", score: (answers[4]==="yes" || answers[5]==="yes") ? 1 : 0 }
+    { name: "The Passive Consumption Pattern", link: "https://patterntruth.github.io/patterns/passive-consumption.html", desc: "Observing information feels like progress. Often it isn't.", score: answers[1]==="yes" ? 1 : 0 },
+    { name: "The Motion Trap", link: "https://patterntruth.github.io/patterns/motion-trap.html", desc: "Staying busy feels like momentum. It rarely carries forward.", score: answers[2]==="yes" ? 1 : 0 },
+    { name: "The Illusion of Understanding", link: "https://patterntruth.github.io/patterns/illusion-of-understanding.html", desc: "Knowing is not the same as understanding.", score: answers[3]==="yes" ? 1 : 0 },
+    { name: "The Mental Debt Pattern", link: "https://patterntruth.github.io/patterns/mental-debt-pattern.html", desc: "Unresolved decisions don't disappear. They accumulate quietly.", score: answers[4]==="yes" ? 1 : 0 },
+    { name: "The Priority Illusion", link: "https://patterntruth.github.io/patterns/priority-illusion.html", desc: "Most priorities don't decide anything.", score: answers[5]==="yes" ? 1 : 0 },
+    { name: "The Attention Ownership Pattern", link: "https://patterntruth.github.io/patterns/attention-ownership.html", desc: "Your attention isn't free. Someone else is billing it.", score: answers[6]==="yes" ? 1 : 0 },
+
+    // Compound patterns (stronger signal)
+    { name: "The Autopilot Identity", link: "https://patterntruth.github.io/patterns/autopilot-identity.html", desc: "Some lives are lived. Others just repeat.", score: (answers[2]==="yes" && answers[6]==="yes") ? 3 : 0 },
+    { name: "The Self-Narrative Gap", link: "https://patterntruth.github.io/patterns/self-narrative-gap.html", desc: "Who you think you are vs. what your behavior shows.", score: (answers[2]==="yes" && answers[3]==="yes") ? 3 : 0 },
+    { name: "The Decision Drift", link: "https://patterntruth.github.io/patterns/decision-drift.html", desc: "Most life outcomes aren't chosen. They drift.", score: (answers[4]==="yes" || answers[5]==="yes") ? 2 : 0 }
   ];
 
   const active = patterns.filter(p => p.score > 0);
@@ -142,7 +145,7 @@ function showResult() {
   if (active.length === 0) {
     resultBox.innerHTML = `
       <strong>No dominant pattern detected.</strong>
-      <p>Your answers don’t strongly match a single behavioral structure yet.</p>
+      <p>Your answers don’t strongly map to a specific behavior structure.</p>
     `;
     resultBox.style.display = "block";
     return;
