@@ -37,6 +37,23 @@ a { color: #8ab4f8; text-decoration: none; }
 .share { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.75rem; }
 .share a, .share button { font-size: 0.85rem; padding: 6px 10px; border-radius: 6px; border: 1px solid #2d3748; background: #0f1115; color: #8ab4f8; cursor: pointer; text-decoration: none; }
 .share a:hover, .share button:hover { border-color: #3b82f6; }
+  
+  #native-ad-container {
+      display: none;
+      width: 400px;
+      place-items: center;
+      margin-right: auto;
+      margin-left: auto;
+    }
+    .highlight {
+      opacity: .70;
+      font-size: 14px;
+    }
+    @media (max-width: 768px) {
+  #native-ad-container {
+    max-width: 300px;
+  }
+}
 </style>
 </head>
 <body>
@@ -150,6 +167,7 @@ function showResult() {
     `;
     resultBox.style.display = "block";
     return;
+    document.getElementById("native-ad-container").style.display = "grid";
   }
 
   active.sort((a,b)=>b.score-a.score);
@@ -181,5 +199,13 @@ function showResult() {
   resultBox.scrollIntoView({ behavior: "smooth" });
 }
 </script>
+
+<div id="native-ad-container">
+    <span class="highlight">Supporting ads supports us</span>
+  <!-- Adsterra Native Code goes here -->
+    <script async="async" data-cfasync="false" src="https://pl28564010.effectivegatecpm.com/baefa54fe986168a11c27ebcd354d6c4/invoke.js"></script>
+<div id="container-baefa54fe986168a11c27ebcd354d6c4"></div>
+</div>
+  
 </body>
 </html>
