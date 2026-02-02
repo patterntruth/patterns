@@ -115,23 +115,42 @@ function updateProgress() {
 
 function showResult() {
   const resultBox = document.getElementById("resultBox");
+  const answeredCount = Object.keys(answers).length;
 
-  // Baseline score 1 for all patterns so result shows even if no answers
+  if (answeredCount < 2) {
+    resultBox.innerHTML = `
+      <strong>Not enough signal yet.</strong>
+      <p>Answer at least 2 questions to reveal a meaningful pattern.</p>
+    `;
+    resultBox.style.display = "block";
+    return;
+  }
+
   const patterns = [
-    { name: "The Passive Consumption Pattern", link: "https://patterntruth.github.io/patterns/passive-consumption.html", desc: "Observing information feels like progress. Often it isn't.", score: 1 + (answers[1]==="yes"?2:0) },
-    { name: "The Motion Trap", link: "https://patterntruth.github.io/patterns/motion-trap.html", desc: "Staying busy feels like momentum. It rarely carries forward.", score: 1 + (answers[2]==="yes"?2:0) },
-    { name: "The Illusion of Understanding", link: "https://patterntruth.github.io/patterns/illusion-of-understanding.html", desc: "Knowing is not the same as understanding.", score: 1 + (answers[3]==="yes"?2:0) },
-    { name: "The Mental Debt Pattern", link: "https://patterntruth.github.io/patterns/mental-debt-pattern.html", desc: "Unresolved decisions don't disappear. They accumulate quietly.", score: 1 + (answers[4]==="yes"?2:0) },
-    { name: "The Priority Illusion", link: "https://patterntruth.github.io/patterns/priority-illusion.html", desc: "Most priorities don't decide anything.", score: 1 + (answers[5]==="yes"?2:0) },
-    { name: "The Attention Ownership Pattern", link: "https://patterntruth.github.io/patterns/attention-ownership.html", desc: "Your attention isn't free. Someone else is billing it.", score: 1 + (answers[6]==="yes"?2:0) },
-    { name: "The Self-Narrative Gap", link: "https://patterntruth.github.io/patterns/self-narrative-gap.html", desc: "Who you think you are vs. what your behavior shows.", score: 1 + ((answers[2]==="yes" && answers[3]==="yes")?1:0) },
-    { name: "The Decision Drift", link: "https://patterntruth.github.io/patterns/decision-drift.html", desc: "Most life outcomes aren't chosen. They drift.", score: 1 + ((answers[4]==="yes" || answers[5]==="yes")?1:0) },
-    { name: "The Autopilot Identity", link: "https://patterntruth.github.io/patterns/autopilot-identity.html", desc: "Some lives are lived. Others just repeat.", score: 1 + ((answers[2]==="yes" && answers[6]==="yes")?1:0) }
+    { name: "The Passive Consumption Pattern", link: "https://patterntruth.github.io/patterns/passive-consumption.html", desc: "Observing information feels like progress. Often it isn't.", score: (answers[1]==="yes" && answers[3]==="yes") ? 2 : 0 },
+    { name: "The Motion Trap", link: "https://patterntruth.github.io/patterns/motion-trap.html", desc: "Staying busy feels like momentum. It rarely carries forward.", score: (answers[2]==="yes" && answers[5]==="no") ? 2 : 0 },
+    { name: "The Illusion of Understanding", link: "https://patterntruth.github.io/patterns/illusion-of-understanding.html", desc: "Knowing is not the same as understanding.", score: answers[3]==="yes" ? 2 : 0 },
+    { name: "The Mental Debt Pattern", link: "https://patterntruth.github.io/patterns/mental-debt-pattern.html", desc: "Unresolved decisions don't disappear. They accumulate quietly.", score: answers[4]==="yes" ? 2 : 0 },
+    { name: "The Priority Illusion", link: "https://patterntruth.github.io/patterns/priority-illusion.html", desc: "Most priorities don't decide anything.", score: answers[5]==="yes" ? 2 : 0 },
+    { name: "The Attention Ownership Pattern", link: "https://patterntruth.github.io/patterns/attention-ownership.html", desc: "Your attention isn't free. Someone else is billing it.", score: answers[6]==="yes" ? 2 : 0 },
+    { name: "The Autopilot Identity", link: "https://patterntruth.github.io/patterns/autopilot-identity.html", desc: "Some lives are lived. Others just repeat.", score: (answers[2]==="yes" && answers[6]==="yes") ? 2 : 0 },
+    { name: "The Decision Drift", link: "https://patterntruth.github.io/patterns/decision-drift.html", desc: "Most life outcomes aren't chosen. They drift.", score: (answers[4]==="yes" || answers[5]==="yes") ? 1 : 0 }
   ];
 
-  patterns.sort((a,b)=>b.score-a.score);
-  const primary = patterns[0];
-  const secondary = patterns.slice(1,3).filter(p=>p.score>1).map(p=>p.name);
+  const active = patterns.filter(p => p.score > 0);
+
+  if (active.length === 0) {
+    resultBox.innerHTML = `
+      <strong>No dominant pattern detected.</strong>
+      <p>Your answers don’t strongly match a single behavioral structure yet.</p>
+    `;
+    resultBox.style.display = "block";
+    return;
+  }
+
+  active.sort((a,b)=>b.score-a.score);
+  const primary = active[0];
+  const secondary = active.slice(1,3).map(p=>p.name);
 
   const shareText = `This showed me a pattern I didn’t notice about myself: ${primary.name}. Check which pattern is controlling yours:`;
   const encodedText = encodeURIComponent(shareText);
