@@ -23,6 +23,11 @@
     }
     .sub {
       color: #9aa0a6;
+      margin-bottom: 1.5rem;
+    }
+    .hint {
+      font-size: 0.9rem;
+      color: #8b949e;
       margin-bottom: 2rem;
     }
     .q {
@@ -31,17 +36,40 @@
     .q p {
       margin-bottom: 0.5rem;
     }
+    .btns {
+      display: flex;
+      gap: 8px;
+    }
     button {
       background: #1f2937;
       color: #fff;
       border: 1px solid #2d3748;
       padding: 10px 14px;
-      margin-right: 8px;
       border-radius: 6px;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
     button:hover {
       background: #2b3647;
+    }
+    button.selected {
+      background: #2563eb;
+      border-color: #3b82f6;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .reveal {
+      margin-top: 1.5rem;
+      background: #111827;
+      border: 1px solid #2d3748;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .reveal:hover {
+      background: #0b1220;
     }
     .result {
       margin-top: 2rem;
@@ -63,34 +91,59 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>You’re not choosing most of your behavior.</h1>
-    <p class="sub">Answer 4 questions. No advice. No motivation. Just the pattern you’re running.</p>
+    <h1>Your behavior isn’t random. It’s patterned.</h1>
+    <p class="sub">Answer 6 questions. No advice. No motivation. Just the pattern you’re running.</p>
+    <p class="hint">Takes ~20 seconds · No signup · No tracking</p>
 
-    <div class="q">
-      <p>1) When you consume content, do you usually leave with something concrete done?</p>
-      <button onclick="setAnswer(1, 'yes')">Yes</button>
-      <button onclick="setAnswer(1, 'no')">No</button>
+    <div class="q" data-q="1">
+      <p>1) When you consume information, does it usually end with no concrete change in what you do next?</p>
+      <div class="btns">
+        <button onclick="setAnswer(1, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(1, 'no', this)">No</button>
+      </div>
     </div>
 
-    <div class="q">
-      <p>2) Are your days busy, but the main outcome of your life hasn’t changed in months?</p>
-      <button onclick="setAnswer(2, 'yes')">Yes</button>
-      <button onclick="setAnswer(2, 'no')">No</button>
+    <div class="q" data-q="2">
+      <p>2) Are you often busy, yet the main outcome of your life hasn’t changed in months?</p>
+      <div class="btns">
+        <button onclick="setAnswer(2, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(2, 'no', this)">No</button>
+      </div>
     </div>
 
-    <div class="q">
-      <p>3) Do you often “know” what you should change but continue the same behavior anyway?</p>
-      <button onclick="setAnswer(3, 'yes')">Yes</button>
-      <button onclick="setAnswer(3, 'no')">No</button>
+    <div class="q" data-q="3">
+      <p>3) Do you often feel like you “get it,” but fail to apply it in real situations?</p>
+      <div class="btns">
+        <button onclick="setAnswer(3, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(3, 'no', this)">No</button>
+      </div>
     </div>
 
-    <div class="q">
-      <p>4) Do decisions in your life usually happen by default rather than by explicit choice?</p>
-      <button onclick="setAnswer(4, 'yes')">Yes</button>
-      <button onclick="setAnswer(4, 'no')">No</button>
+    <div class="q" data-q="4">
+      <p>4) Do unresolved decisions or unfinished loops quietly stay in your head for days or weeks?</p>
+      <div class="btns">
+        <button onclick="setAnswer(4, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(4, 'no', this)">No</button>
+      </div>
     </div>
 
-    <button onclick="showResult()">Reveal my pattern</button>
+    <div class="q" data-q="5">
+      <p>5) Do you keep multiple “priorities” that don’t actually decide what you do today?</p>
+      <div class="btns">
+        <button onclick="setAnswer(5, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(5, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="q" data-q="6">
+      <p>6) Does your attention get pulled by platforms, feeds, or notifications more than by deliberate choice?</p>
+      <div class="btns">
+        <button onclick="setAnswer(6, 'yes', this)">Yes</button>
+        <button onclick="setAnswer(6, 'no', this)">No</button>
+      </div>
+    </div>
+
+    <div class="reveal" onclick="showResult()">Reveal my pattern</div>
 
     <div class="result" id="resultBox"></div>
   </div>
@@ -98,60 +151,93 @@
   <script>
     const answers = {};
 
-    function setAnswer(q, val) {
+    function setAnswer(q, val, btn) {
       answers[q] = val;
+
+      const parent = btn.closest(".btns");
+      parent.querySelectorAll("button").forEach(b => {
+        b.classList.remove("selected");
+      });
+      btn.classList.add("selected");
     }
 
     function showResult() {
       const resultBox = document.getElementById("resultBox");
 
-      let primary = null;
-      let secondary = [];
+      const patterns = [
+        {
+          name: "The Passive Consumption Pattern",
+          link: "https://patterntruth.github.io/patterns/passive-consumption.html",
+          desc: "Observing information feels like progress. Often it isn't.",
+          score: answers[1] === "yes" ? 2 : 0
+        },
+        {
+          name: "The Motion Trap",
+          link: "https://patterntruth.github.io/patterns/motion-trap.html",
+          desc: "Staying busy feels like momentum. It rarely carries forward.",
+          score: answers[2] === "yes" ? 2 : 0
+        },
+        {
+          name: "The Illusion of Understanding",
+          link: "https://patterntruth.github.io/patterns/illusion-of-understanding.html",
+          desc: "Knowing is not the same as understanding.",
+          score: answers[3] === "yes" ? 2 : 0
+        },
+        {
+          name: "The Mental Debt Pattern",
+          link: "https://patterntruth.github.io/patterns/mental-debt-pattern.html",
+          desc: "Unresolved decisions don't disappear. They accumulate quietly.",
+          score: answers[4] === "yes" ? 2 : 0
+        },
+        {
+          name: "The Priority Illusion",
+          link: "https://patterntruth.github.io/patterns/priority-illusion.html",
+          desc: "Most priorities don't decide anything.",
+          score: answers[5] === "yes" ? 2 : 0
+        },
+        {
+          name: "The Attention Ownership Pattern",
+          link: "https://patterntruth.github.io/patterns/attention-ownership.html",
+          desc: "Your attention isn't free. Someone else is billing it.",
+          score: answers[6] === "yes" ? 2 : 0
+        },
+        {
+          name: "The Self-Narrative Gap",
+          link: "https://patterntruth.github.io/patterns/self-narrative-gap.html",
+          desc: "Who you think you are vs. what your behavior shows.",
+          score: (answers[2] === "yes" && answers[3] === "yes") ? 1 : 0
+        },
+        {
+          name: "The Decision Drift",
+          link: "https://patterntruth.github.io/patterns/decision-drift.html",
+          desc: "Most life outcomes aren't chosen. They drift.",
+          score: (answers[4] === "yes" || answers[5] === "yes") ? 1 : 0
+        },
+        {
+          name: "The Autopilot Identity",
+          link: "https://patterntruth.github.io/patterns/autopilot-identity.html",
+          desc: "Some lives are lived. Others just repeat.",
+          score: (answers[2] === "yes" && answers[6] === "yes") ? 1 : 0
+        }
+      ];
 
-      if (answers[1] === "no") primary = {
-        name: "The Passive Consumption Pattern",
-        link: "https://patterntruth.github.io/patterns/passive-consumption.html",
-        desc: "Observing information feels like progress. Often it isn't."
-      };
+      patterns.sort((a, b) => b.score - a.score);
 
-      if (!primary && answers[2] === "yes") primary = {
-        name: "The Motion Trap",
-        link: "https://patterntruth.github.io/patterns/motion-trap.html",
-        desc: "Staying busy feels like momentum. It rarely carries forward."
-      };
-
-      if (!primary && answers[3] === "yes") primary = {
-        name: "The Self-Narrative Gap",
-        link: "https://patterntruth.github.io/patterns/self-narrative-gap.html",
-        desc: "Who you think you are vs. what your behavior shows."
-      };
-
-      if (!primary && answers[4] === "yes") primary = {
-        name: "The Decision Drift",
-        link: "https://patterntruth.github.io/patterns/decision-drift.html",
-        desc: "Most life outcomes aren't chosen. They drift."
-      };
-
-      if (!primary) primary = {
-        name: "The Autopilot Identity",
-        link: "https://patterntruth.github.io/patterns/autopilot-identity.html",
-        desc: "Some lives are lived. Others just repeat."
-      };
-
-      if (answers[1] === "no") secondary.push("Passive Consumption");
-      if (answers[2] === "yes") secondary.push("Motion Trap");
-      if (answers[3] === "yes") secondary.push("Self-Narrative Gap");
-      if (answers[4] === "yes") secondary.push("Decision Drift");
+      const primary = patterns[0];
+      const secondary = patterns.slice(1, 3).map(p => p.name);
 
       resultBox.innerHTML = `
-        <strong>Your dominant pattern:</strong><br>
+        <strong>Your dominant pattern:</strong>
         <h2>${primary.name}</h2>
         <p>${primary.desc}</p>
         <a href="${primary.link}">View the pattern →</a>
-        <div class="small">Secondary patterns detected: ${secondary.join(", ") || "None obvious"}</div>
+        <div class="small">Secondary patterns detected: ${secondary.join(", ")}</div>
+        <div class="small"><a href="https://patterntruth.github.io/patterns/">View all patterns →</a></div>
+        <div class="small">This doesn’t describe your personality. It describes the structure your behavior currently follows.</div>
       `;
 
       resultBox.style.display = "block";
+      resultBox.scrollIntoView({ behavior: "smooth" });
     }
   </script>
 </body>
